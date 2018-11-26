@@ -1,6 +1,11 @@
 import {combineReducers} from 'redux'
 import {reducer as networkReducer} from './network'
-import * as Types from '../types'
+import { LOGIN, create, SHARE, update, remove, list } from '../types';
+
 export default combineReducers({
-    login:networkReducer(Types.LOGIN_REQUEST,Types.LOGIN_SUCCESS,Types.LOGIN_FAILURE)
+    login:networkReducer(LOGIN),
+    createShare:networkReducer(create(SHARE)),
+    updateShare:networkReducer(update(SHARE)),
+    deleteShare:networkReducer(remove(SHARE)),
+    listShare:networkReducer(list(SHARE)),
 })

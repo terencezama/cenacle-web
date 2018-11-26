@@ -10,7 +10,8 @@ import LoginForm from './Form/index'
 import styles from './styles';
 import { connect } from 'react-redux';
 import action from '../../state/action';
-import * as Types from '../../state/types';
+import { request, LOGIN } from '../../state/types';
+
 class LoginScreen extends Component {
 
   _onSubmit = (values, { setSubmitting }) => {
@@ -56,7 +57,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loginRequest : params => dispatch(action(params,Types.LOGIN_REQUEST))
+    loginRequest : params => dispatch(action(params,request(LOGIN)))
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(LoginScreen)) ;

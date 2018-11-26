@@ -58,7 +58,6 @@ class App extends Component {
           <PrivateRoute exact authed={authed} path='/main' component={MainScreen} />
           <PrivateRoute exact authed={authed} path='/' component={IndexScreen} />
           <PrivateRoute exact authed={authed} path='/shares' component={ShareListScreen} />
-          <PrivateRoute exact authed={authed} path='/shares/add' component={ShareEditScreen} />
           <PrivateRoute exact authed={authed} path='/shares/:shareId' component={ShareEditScreen} />
         </div>
       </Router>

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { withStyles, Drawer, List, ListItemIcon, ListItemText, ListItem } from '@material-ui/core';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+
+import EventIcon from '@material-ui/icons/Event';
+import ShareIcon from '@material-ui/icons/Share';
 
 export class CDrawer extends Component {
 
@@ -21,10 +22,19 @@ export class CDrawer extends Component {
             >
                 <div className={classes.toolbar} />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                    {[
+                        {
+                            text:'Shares',
+                            icon:<ShareIcon />
+                        },
+                        {
+                            text:'Events',
+                            icon:<EventIcon />
+                        }
+                    ].map((obj, index) => (
+                        <ListItem button key={obj.text}>
+                            <ListItemIcon>{obj.icon}</ListItemIcon>
+                            <ListItemText primary={obj.text} />
                         </ListItem>
                     ))}
                 </List>

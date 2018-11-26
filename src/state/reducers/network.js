@@ -6,7 +6,10 @@ const INITIAL_STATE = {
 }
 
 
-export const reducer = (requestType,successType,failureType) => (state = INITIAL_STATE, action) =>{
+export const reducer = (type) => (state = INITIAL_STATE, action) =>{
+  const requestType = `${type}_REQUEST`;
+  const successType = `${type}_SUCCESS`;
+  const failureType = `${type}_FAILURE`;
   switch (action.type) {
   case requestType:
     return {

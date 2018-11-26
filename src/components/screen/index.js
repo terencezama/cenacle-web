@@ -5,7 +5,6 @@ import { CAppBar, CDrawer } from '..';
 
 const Screen = (props) => {
     const {classes} = props;
-    console.log(props);
     return (
         <div className={classes.root}>
             <CAppBar title={props.match.url} />
