@@ -2,7 +2,8 @@ import { takeLatest, all } from 'redux-saga/effects'
 
 import { loginSaga } from './login/sagas';
 import { createShareSaga,deleteShareSaga,listShareSaga,updateShareSaga } from './share/sagas';
-import { request, LOGIN, create, SHARE, list, update, remove } from './types';
+import { request, LOGIN, create, SHARE, list, update, remove, NOTIFY } from './types';
+import { notify } from './notif/sagas';
 export default function * root () {
     yield all([
       // some sagas only receive an action
@@ -11,6 +12,7 @@ export default function * root () {
       takeLatest(request(list(SHARE)),listShareSaga),
       takeLatest(request(update(SHARE)),updateShareSaga),
       takeLatest(request(remove(SHARE)),deleteShareSaga),
+      takeLatest(request(NOTIFY),notify)
       
   
       // some sagas receive extra parameters in addition to an action

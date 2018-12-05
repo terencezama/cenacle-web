@@ -164,7 +164,7 @@ class ShareEditScreen extends Component {
     }
 
     return (
-      <Screen match={match} >
+      <Screen match={match} history={this.props.history} >
         <Paper className={classes.paper}>
           <Formik
             initialValues={{

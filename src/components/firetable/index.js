@@ -143,6 +143,7 @@ class FireTable extends Component {
 
   render() {
     const { classes, headers, rows, page, rowsPerPage, count, order, orderBy } = this.props;
+    console.log('rows',rows);
     return (
       <Paper className={classes.root}>
         <Toolbar>
@@ -191,11 +192,12 @@ class FireTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => {
+              {rows.map(row => {                
                 return (
                   <TableRow key={row.id}>
                     {headers.map(header => {
                       let value = row[header];
+                      
                       if (typeof value != 'string') {
                         if (value.constructor.name == 'Timestamp') {
                           return (<TableCell><Moment format="DD/MM/YYYY">{value.toDate()}</Moment></TableCell>)

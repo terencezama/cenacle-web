@@ -4,7 +4,7 @@ import { Screen, FireTable } from '../../../components';
 import { withStyles, Typography } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { performAction } from '../../../state';
-import { request, list, SHARE } from '../../../state/types';
+import { request, list, SHARE, remove } from '../../../state/types';
 import {withRouter} from 'react-router-dom';
 
 class ShareListScreen extends Component {
@@ -17,17 +17,34 @@ class ShareListScreen extends Component {
     count:0,
     orderBy: 'title',
     order: 'asc',
+    delete: undefined
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { listShare } = props;
-    if (state.rows != listShare && listShare.response && !listShare.fetching) {
+    const { listShare, deleteShare } = props;
+
+    if (listShare.response && state.rows != listShare.response.docs && !listShare.fetching) {
+      console.log('listshare >>>');
       const count = listShare.response.count;
       return {
         rows: listShare.response.docs,
         count,
         last: listShare.response.last
       };
+    }else if (deleteShare.response && state.delete != deleteShare.response && !deleteShare.fetching){
+      console.log('deleteShare >>>');
+      let nrows = state.rows;
+      const deleteId = deleteShare.response.id
+      nrows = nrows.filter(el=>el.id !== deleteId);
+      props.listShareRequest({
+        ...state
+      })
+      return{
+        delete:deleteShare.response,
+        rows:nrows,
+        count:nrows.length
+      }
+      
     }
 
     return false;
@@ -55,7 +72,7 @@ class ShareListScreen extends Component {
     const { headers, rows, rowsPerPage, page, count, orderBy, order } = this.state
 
     return (
-      <Screen match={match} >
+      <Screen match={match} history={this.props.history}>
         <FireTable
           headers={headers}
           rows={rows}
@@ -97,7 +114,7 @@ class ShareListScreen extends Component {
             })
           }}
           delete={row=>{
-
+            this.props.deleteShareRequest(row)
           }}
           notify={row=>{
 
@@ -125,11 +142,13 @@ class ShareListScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  listShare: state.share.list
+  listShare: state.share.list,
+  deleteShare:state.share.delete
 
 })
 const mapDispatchToProps = (dispatch) => ({
-  listShareRequest: params => dispatch(performAction(params, request(list(SHARE))))
+  listShareRequest: params => dispatch(performAction(params, request(list(SHARE)))),
+  deleteShareRequest: params => dispatch(performAction(params, request(remove(SHARE)))),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ShareListScreen))

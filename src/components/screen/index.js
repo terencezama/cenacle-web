@@ -8,7 +8,7 @@ const Screen = (props) => {
     return (
         <div className={classes.root}>
             <CAppBar title={props.match.url} />
-            <CDrawer />
+            <CDrawer history={props.history} />
             <main className={classes.content}>
               <div className={classes.toolbar} />
               {props.children}

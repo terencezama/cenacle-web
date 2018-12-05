@@ -25,3 +25,4 @@ export const list = (type) => {
 // ####################################################
 export const LOGIN = "LOGIN";
 export const SHARE = "SHARE";
+export const NOTIFY = "NOTIFY";

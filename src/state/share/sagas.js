@@ -3,7 +3,7 @@ import { put } from 'redux-saga/effects'
 import { performAction, Types } from '..';
 import { firestore, client as firebase } from '../../lib/firebase';
 import { CStorage } from '../../lib';
-import { create, SHARE, failure, success, list, update } from '../types';
+import { create, SHARE, failure, success, list, update, remove } from '../types';
 // import * as admin from 'firebase-admin';
 
 export function* createShareSaga(action) {
@@ -41,24 +41,29 @@ export function* listShareSaga(action) {
             if(!result.exists){
                 throw "id doesn't exists"
             }
-            docs.push(result.data())
+            docs.push({
+                ...result.data(),
+                id:id
+            })
         } else {
             result = yield firestore.collection('cenacle').doc(env).collection('shares').orderBy(orderBy, order).get()
             count = result.size;
             let lindex = (page * rowsPerPage) - 1
             let last = result.docs[lindex];
-            if (page == 0) {
-                result = firestore.collection('cenacle').doc(env).collection('shares')
-                    .limit(rowsPerPage)
-                    .orderBy(orderBy, order)
-            } else {
-                result = firestore.collection('cenacle').doc(env).collection('shares')
-                    .limit(rowsPerPage)
-                    .orderBy(orderBy, order)
-                    .startAfter(last)
+            if(!search || search == ""){
+                if (page == 0) {
+                    result = firestore.collection('cenacle').doc(env).collection('shares')
+                        .limit(rowsPerPage)
+                        .orderBy(orderBy, order)
+                } else {
+                    result = firestore.collection('cenacle').doc(env).collection('shares')
+                        .limit(rowsPerPage)
+                        .orderBy(orderBy, order)
+                        .startAfter(last)
+                }
+    
+                result = yield result.get();
             }
-
-            result = yield result.get();
             
             result.forEach(doc => {
                 if (search && search != "") {
@@ -95,6 +100,19 @@ export function* listShareSaga(action) {
 }
 
 export function* deleteShareSaga(action) {
+    console.log('delete action',action);
+    const {payload:{id}} = action;
+    const env = CStorage.getItem('prod') ? 'prod' : 'qa';
+    let opts = action.payload;
+    try {
+        let result = firestore.collection('cenacle').doc(env).collection('shares').doc(id);
+        result = yield result.delete();
+        console.log('result:', result);
+        yield put(performAction({ ...opts }, success(remove(SHARE))))
+    } catch (e) {
+        console.log(e)
+        yield put(performAction({ e, opts }, failure(remove(SHARE))))
+    }
 
 }
 

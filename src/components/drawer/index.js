@@ -9,6 +9,13 @@ import ShareIcon from '@material-ui/icons/Share';
 
 export class CDrawer extends Component {
 
+    _onItemClick = (obj,index) => {
+        console.log('itemclick',obj,index);
+        this.props.history.push({
+            pathname:obj.action,
+            
+        })
+    }
 
     render() {
         const { classes } = this.props;
@@ -25,14 +32,16 @@ export class CDrawer extends Component {
                     {[
                         {
                             text:'Shares',
-                            icon:<ShareIcon />
+                            icon:<ShareIcon />,
+                            action: '/shares'
                         },
                         {
                             text:'Events',
-                            icon:<EventIcon />
+                            icon:<EventIcon />,
+                            action: '/events'
                         }
                     ].map((obj, index) => (
-                        <ListItem button key={obj.text}>
+                        <ListItem button key={obj.text} onClick={()=>this._onItemClick(obj,index)}>
                             <ListItemIcon>{obj.icon}</ListItemIcon>
                             <ListItemText primary={obj.text} />
                         </ListItem>
