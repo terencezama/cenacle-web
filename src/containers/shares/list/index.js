@@ -4,8 +4,9 @@ import { Screen, FireTable } from '../../../components';
 import { withStyles, Typography } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { performAction } from '../../../state';
-import { request, list, SHARE, remove } from '../../../state/types';
+import { request, list, SHARE, remove, NOTIFY } from '../../../state/types';
 import {withRouter} from 'react-router-dom';
+import { CStorage } from '../../../lib';
 
 class ShareListScreen extends Component {
 
@@ -117,7 +118,18 @@ class ShareListScreen extends Component {
             this.props.deleteShareRequest(row)
           }}
           notify={row=>{
-
+            // console.log('notify',row);
+            const env = CStorage.getItem('prod') ? 'prod' : 'qa';
+            let message = {
+              to:`/topics/${env}/all`,
+              data:{
+                type:"notif",
+                message:row.title,
+                title:"Nouvelle Partage"
+              },
+              priority:"high"
+            }
+            this.props.notifyRequest(message);
           }}
           search={value=>{
             const nstate = {
@@ -149,6 +161,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   listShareRequest: params => dispatch(performAction(params, request(list(SHARE)))),
   deleteShareRequest: params => dispatch(performAction(params, request(remove(SHARE)))),
+  notifyRequest: params => dispatch(performAction(params,request(NOTIFY)))
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ShareListScreen))
