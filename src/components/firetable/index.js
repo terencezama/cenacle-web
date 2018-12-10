@@ -31,7 +31,7 @@ const styles = theme => ({
   tableCell: {
     height: '3em',
     lineHeight: '1em',
-    width: 200,
+    // width: 200,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     // whiteSpace:'nowrap'
@@ -142,13 +142,13 @@ class FireTable extends Component {
   }
 
   render() {
-    const { classes, headers, rows, page, rowsPerPage, count, order, orderBy } = this.props;
+    const { classes, headers, rows, page, rowsPerPage, count, order, orderBy, title } = this.props;
     console.log('rows',rows);
     return (
       <Paper className={classes.root}>
         <Toolbar>
           <Typography variant="h6" id="tableTitle" >
-            Shares
+            {title}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -198,7 +198,7 @@ class FireTable extends Component {
                     {headers.map(header => {
                       let value = row[header];
                       
-                      if (typeof value != 'string') {
+                      if (typeof value != 'string' && value != undefined) {
                         if (value.constructor.name == 'Timestamp') {
                           return (<TableCell><Moment format="DD/MM/YYYY">{value.toDate()}</Moment></TableCell>)
                         } else {
@@ -244,6 +244,7 @@ class FireTable extends Component {
 }
 
 FireTable.propTypes = {
+  title: PropTypes.string,
   classes: PropTypes.object.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func.isRequired,

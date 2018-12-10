@@ -4,6 +4,8 @@ import MainScreen from './main';
 import UsersScreen from './users';
 import ShareListScreen from './shares/list';
 import ShareEditScreen from './shares/edit';
+import EventListScreen from './events/list';
+import EventEditScreen from './events/edit';
 
 export {
     IndexScreen,
@@ -11,6 +13,8 @@ export {
     MainScreen,
     UsersScreen,
     ShareListScreen,
-    ShareEditScreen
+    ShareEditScreen,
+    EventListScreen,
+    EventEditScreen,
 }
 

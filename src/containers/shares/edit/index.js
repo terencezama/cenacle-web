@@ -90,7 +90,10 @@ class ShareEditScreen extends Component {
         // }, 300);
       }
 
-    } else if (prevProps.listShareState != listShareState && !listShareState.fetching) {
+    } else if (
+      prevProps.listShareState != listShareState && 
+      !listShareState.fetching &&
+      this.props.location.pathname !== "/shares/add") {
       console.log('listShare', listShareState);
       if (listShareState.error) {
         this.setState({

@@ -75,6 +75,7 @@ class ShareListScreen extends Component {
     return (
       <Screen match={match} history={this.props.history}>
         <FireTable
+          title={"Shares"}
           headers={headers}
           rows={rows}
           rowsPerPage={rowsPerPage}
@@ -121,7 +122,7 @@ class ShareListScreen extends Component {
             // console.log('notify',row);
             const env = CStorage.getItem('prod') ? 'prod' : 'qa';
             let message = {
-              to:`/topics/${env}/all`,
+              to:`/topics/${env}_all`,
               data:{
                 type:"notif",
                 message:row.title,
