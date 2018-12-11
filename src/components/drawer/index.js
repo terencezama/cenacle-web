@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import EventIcon from '@material-ui/icons/Event';
 import ShareIcon from '@material-ui/icons/Share';
+import NotesIcon from '@material-ui/icons/Notes';
 
 export class CDrawer extends Component {
 
@@ -40,7 +41,13 @@ export class CDrawer extends Component {
                             text: 'Events',
                             icon: <EventIcon />,
                             action: '/events'
-                        }
+                        },
+                        {
+                            text: 'Summaries',
+                            icon: <NotesIcon />,
+                            action: '/summaries'
+                        },
+                        
                     ].map((obj, index) => (
                         <ListItem button key={obj.text} onClick={(e) => this._onItemClick(obj, index,e)}>
                             <ListItemIcon>{obj.icon}</ListItemIcon>

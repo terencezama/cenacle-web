@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 // const Index = () => <h2>Home</h2>;
 
 import firebase from 'firebase'
-import { LoginScreen, MainScreen, UsersScreen, IndexScreen, ShareListScreen, ShareEditScreen, EventEditScreen, EventListScreen } from './containers';
+import { LoginScreen, IndexScreen, ShareListScreen, ShareEditScreen, EventEditScreen, EventListScreen, SummaryListScreen, SummaryEditScreen } from './containers';
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
   return (
     <Route
@@ -52,14 +52,18 @@ class App extends Component {
     return (
       <Router>
         <div>
+          
           <Route path="/login" component={LoginScreen} />
-          <Route exact authed={authed} path='/users' component={UsersScreen} />
-          <PrivateRoute exact authed={authed} path='/main' component={MainScreen} />
           <PrivateRoute exact authed={authed} path='/' component={IndexScreen} />
+
           <PrivateRoute exact authed={authed} path='/shares' component={ShareListScreen} />
           <PrivateRoute exact authed={authed} path='/shares/:shareId' component={ShareEditScreen} />
+          
           <PrivateRoute exact authed={authed} path='/events' component={EventListScreen} />
           <PrivateRoute exact authed={authed} path='/events/:eventId' component={EventEditScreen} />
+
+          <PrivateRoute exact authed={authed} path='/summaries' component={SummaryListScreen} />
+          <PrivateRoute exact authed={authed} path='/summaries/:summaryId' component={SummaryEditScreen} />
         </div>
       </Router>
     );

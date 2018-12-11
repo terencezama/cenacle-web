@@ -6,6 +6,8 @@ import ShareListScreen from './shares/list';
 import ShareEditScreen from './shares/edit';
 import EventListScreen from './events/list';
 import EventEditScreen from './events/edit';
+import SummaryListScreen from './summaries/list';
+import SummaryEditScreen from './summaries/edit';
 
 export {
     IndexScreen,
@@ -16,5 +18,7 @@ export {
     ShareEditScreen,
     EventListScreen,
     EventEditScreen,
+    SummaryListScreen,
+    SummaryEditScreen
 }
 
