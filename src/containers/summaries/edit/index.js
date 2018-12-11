@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styles from './styles';
-import { Screen } from '../../../components';
-import { withStyles, FormControl, InputLabel, Input, Button, Paper, Snackbar, LinearProgress, TextField, InputAdornment, IconButton } from '@material-ui/core';
+import { Screen, BibleLink } from '../../../components';
+import { withStyles, FormControl, InputLabel, Input, Button, Paper, Snackbar, LinearProgress, TextField, InputAdornment, IconButton, Chip } from '@material-ui/core';
 import LocationIcon from '@material-ui/icons/LocationOn'
 import RichTextEditor from 'react-rte';
 import { Formik } from 'formik';
@@ -203,6 +203,7 @@ class SummaryEditScreen extends Component {
     }
     return (
       <Screen match={match} history={this.props.history} >
+      <BibleLink />
         <Paper className={classes.paper}>
           <Formik
             initialValues={this.state.initialValues}
@@ -220,15 +221,18 @@ class SummaryEditScreen extends Component {
               /* and other goodies */
             }) => (
                 <form className={classes.form} onSubmit={handleSubmit}>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="title">{"Title"}</InputLabel>
-                    <Input
-                      id="title"
-                      name="title"
-                      type="default"
+                  <FormControl margin="normal" required>
+                    <TextField
+                      id="date"
+                      label="Date"
+                      type="date"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.title} />
+                      value={values.date}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
                   </FormControl>
                   <TextField
                     id="desc"
@@ -245,75 +249,7 @@ class SummaryEditScreen extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="contact">{"Contact"}</InputLabel>
-                    <Input
-                      id="contact"
-                      name="contact"
-                      type="tel"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.contact} />
-                  </FormControl>
-                  <FormControl margin="normal" required>
-                    <TextField
-                      id="date"
-                      label="Date"
-                      type="date"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.date}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </FormControl>
-                  <br />
-                  <FormControl margin="normal" required>
-                    <TextField
-                      id="time"
-                      label="Time"
-                      type="time"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.time}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{
-                        step: 300, // 5 min
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="location">{"Location 'lat, lng'"}</InputLabel>
-                    <Input
-                      id="location"
-                      name="location"
-                      type="default"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.location}
-                      endAdornment={
-                        <InputAdornment variant="filled" position="end">
-                          <IconButton
-                            aria-label="Toggle password visibility"
-                            onClick={() => {
-                              window.open('https://www.google.com/maps/place/Cenacle+Du+Saint+Esprit/@-20.326586,57.4727943,17z/data=!3m1!4b1!4m5!3m4!1s0x217c5d27ceec3a55:0xe22ed39625160918!8m2!3d-20.326591!4d57.474983', "_blank")
-                            }}
-                          >
-                            <LocationIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-
-
-
-
-
-
+                  
 
                   <Button
                     type="submit"

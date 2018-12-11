@@ -4,7 +4,7 @@ import { Screen, FireTable } from '../../../components';
 import { withStyles, Typography } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { performAction } from '../../../state';
-import { request, list, EVENT, remove, NOTIFY } from '../../../state/types';
+import { request, list, SUMMARY, remove, NOTIFY } from '../../../state/types';
 import { withRouter } from 'react-router-dom';
 import { CStorage } from '../../../lib';
 
@@ -160,8 +160,8 @@ const mapStateToProps = (state) => ({
 
 })
 const mapDispatchToProps = (dispatch) => ({
-  listSummaryRequest: params => dispatch(performAction(params, request(list(EVENT)))),
-  deleteSummaryRequest: params => dispatch(performAction(params, request(remove(EVENT)))),
+  listSummaryRequest: params => dispatch(performAction(params, request(list(SUMMARY)))),
+  deleteSummaryRequest: params => dispatch(performAction(params, request(remove(SUMMARY)))),
   notifyRequest: params => dispatch(performAction(params, request(NOTIFY)))
 
 })
