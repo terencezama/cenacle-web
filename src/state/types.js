@@ -28,3 +28,4 @@ export const SHARE = "SHARE";
 export const NOTIFY = "NOTIFY";
 export const EVENT = "EVENT";
 export const SUMMARY = "SUMMARY";
+export const VERSE = "VERSE";

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 import {reducer as networkReducer} from './network'
-import { LOGIN, create, SHARE, update, remove, list, NOTIFY, EVENT, SUMMARY } from '../types';
+import { LOGIN, create, SHARE, update, remove, list, NOTIFY, EVENT, SUMMARY, VERSE } from '../types';
 
 const shareReducer = combineReducers({
     create:networkReducer(create(SHARE)),
@@ -22,10 +22,16 @@ const summaryReducer = combineReducers({
     delete:networkReducer(remove(SUMMARY)),
     list:networkReducer(list(SUMMARY)),
 });
+
+const verseReducer = combineReducers({
+    get:networkReducer(list(VERSE)),
+    update:networkReducer(update(VERSE))
+})
 export default combineReducers({
     login:networkReducer(LOGIN),
     share:shareReducer,
     notify:networkReducer(NOTIFY),
     event:eventReducer,
     summary:summaryReducer,
+    verse:verseReducer
 })

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 // const Index = () => <h2>Home</h2>;
 
 import firebase from 'firebase'
-import { LoginScreen, IndexScreen, ShareListScreen, ShareEditScreen, EventEditScreen, EventListScreen, SummaryListScreen, SummaryEditScreen } from './containers';
+import { LoginScreen, IndexScreen, ShareListScreen, ShareEditScreen, EventEditScreen, EventListScreen, SummaryListScreen, SummaryEditScreen, VerseOfTheDayScreen } from './containers';
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
   return (
     <Route
@@ -54,7 +54,8 @@ class App extends Component {
         <div>
           
           <Route path="/login" component={LoginScreen} />
-          <PrivateRoute exact authed={authed} path='/' component={IndexScreen} />
+          {/* <PrivateRoute exact authed={authed} path='/' component={IndexScreen} /> */}
+          <PrivateRoute exact authed={authed} component={IndexScreen} />
 
           <PrivateRoute exact authed={authed} path='/shares' component={ShareListScreen} />
           <PrivateRoute exact authed={authed} path='/shares/:shareId' component={ShareEditScreen} />
@@ -64,6 +65,8 @@ class App extends Component {
 
           <PrivateRoute exact authed={authed} path='/summaries' component={SummaryListScreen} />
           <PrivateRoute exact authed={authed} path='/summaries/:summaryId' component={SummaryEditScreen} />
+
+          <PrivateRoute exact authed={authed} path='/verse_of_the_day' component={VerseOfTheDayScreen} />
         </div>
       </Router>
     );

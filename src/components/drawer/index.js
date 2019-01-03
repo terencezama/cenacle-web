@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EventIcon from '@material-ui/icons/Event';
 import ShareIcon from '@material-ui/icons/Share';
 import NotesIcon from '@material-ui/icons/Notes';
+import BookIcon from '@material-ui/icons/BookTwoTone';
 
 export class CDrawer extends Component {
 
@@ -33,33 +34,42 @@ export class CDrawer extends Component {
                 <List>
                     {[
                         {
+                            text: 'Verse Of The Day',
+                            icon: <BookIcon />,
+                            action: '/verse_of_the_day',
+                            add:false
+                        },
+                        {
                             text: 'Shares',
                             icon: <ShareIcon />,
-                            action: '/shares'
+                            action: '/shares',
+                            add:true
                         },
                         {
                             text: 'Events',
                             icon: <EventIcon />,
-                            action: '/events'
+                            action: '/events',
+                            add:true
                         },
                         {
                             text: 'Summaries',
                             icon: <NotesIcon />,
-                            action: '/summaries'
+                            action: '/summaries',
+                            add:true
                         },
                         
                     ].map((obj, index) => (
                         <ListItem button key={obj.text} onClick={(e) => this._onItemClick(obj, index,e)}>
                             <ListItemIcon>{obj.icon}</ListItemIcon>
                             <ListItemText primary={obj.text} />
-                            <IconButton className={classes.button} aria-label="Add" onClick={e=>{
+                            {obj.add?(<IconButton className={classes.button} aria-label="Add" onClick={e=>{
                                 e.stopPropagation();
                                 this.props.history.push({
                                     pathname:`${obj.action}/add`
                                 })
                             }}>
                                 <AddIcon />
-                            </IconButton>
+                            </IconButton>):undefined}
                         </ListItem>
                     ))}
                 </List>

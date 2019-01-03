@@ -2,10 +2,11 @@ import { takeLatest, all } from 'redux-saga/effects'
 
 import { loginSaga } from './login/sagas';
 import { createShareSaga,deleteShareSaga,listShareSaga,updateShareSaga } from './share/sagas';
-import { request, LOGIN, create, SHARE, list, update, remove, NOTIFY, EVENT, SUMMARY } from './types';
+import { request, LOGIN, create, SHARE, list, update, remove, NOTIFY, EVENT, SUMMARY, VERSE } from './types';
 import { notify } from './notif/sagas';
 import { createEventSaga, listEventSaga, updateEventSaga, deleteEventSaga } from './event/sagas';
 import { createSummarySaga, updateSummarySaga, deleteSummarySaga, listSummarySaga } from './summary/sagas';
+import {listVerseSaga,updateVerseSaga} from './verse/sagas'
 export default function * root () {
     yield all([
       // some sagas only receive an action
@@ -27,5 +28,8 @@ export default function * root () {
       takeLatest(request(list(SUMMARY)),listSummarySaga),
       takeLatest(request(update(SUMMARY)),updateSummarySaga),
       takeLatest(request(remove(SUMMARY)),deleteSummarySaga),
+
+      takeLatest(request(list(VERSE)),listVerseSaga),
+      takeLatest(request(update(VERSE)),updateVerseSaga),
     ])
   }

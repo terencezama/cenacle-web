@@ -10,7 +10,7 @@ const Screen = (props) => {
             <CAppBar title={props.match.url} />
             <CDrawer history={props.history} />
             <main className={classes.content}>
-              <div className={classes.toolbar} />
+              {/* <div className={classes.toolbar} /> */}
               {props.children}
             </main>
           </div>

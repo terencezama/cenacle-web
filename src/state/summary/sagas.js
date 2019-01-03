@@ -2,10 +2,10 @@ import { put } from 'redux-saga/effects'
 import { performAction, Types } from '..';
 import { firestore, client as firebase } from '../../lib/firebase';
 import { CStorage } from '../../lib';
-import { success, create, EVENT, failure, remove, update, list } from '../types';
+import { success, create, SUMMARY, failure, remove, update, list } from '../types';
 
-const type = EVENT;
-const collection = "events";
+const type = SUMMARY;
+const collection = "summaries";
 
 export function* createSummarySaga(action){
     const {payload:{values,extra}} = action;
@@ -68,7 +68,7 @@ export function* listSummarySaga(action){
                 if (search && search != "") {
                     // result.startAt(search).endAt(search+'\uf8ff')
                     const data = doc.data();
-                    if (data.title.indexOf(search) !== -1) {
+                    if (data.desc.indexOf(search) !== -1) {
                         docs.push({
                             id: doc.id,
                             ...data,

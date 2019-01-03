@@ -12,12 +12,8 @@ import { Redirect } from 'react-router-dom'
 import moment from 'moment';
 
 const initialValues = {
-  title: "",
   desc: "",
-  contact: "",
-  date: moment().format('YYYY-MM-DD'),
-  time: "14:00",
-  location: ""
+  date: moment().format('YYYY-MM-DD')
 }
 class SummaryEditScreen extends Component {
   constructor(props) {

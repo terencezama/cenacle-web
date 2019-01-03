@@ -33,7 +33,7 @@ class BibleLink extends Component {
 
                             >
                                 {bibleApi.map(book => (
-                                    <MenuItem key={book.ord} value={book.value.toLowerCase()}>
+                                    <MenuItem key={book.ord} value={book}>
                                         {book.label}
                                     </MenuItem>
                                 ))}
@@ -48,10 +48,9 @@ class BibleLink extends Component {
                                     onChange={e => { this.setState({ chapter: parseInt(e.target.value) }) }}
                                     type="number"
                                     className={classes.textField}
-                                    InputLabelProps={{
+                                    inputlabelprops={{
                                         shrink: true,
                                     }}
-                                    margin="normal"
                                 />
                             </FormControl>) : undefined}
                         {chapter ? (
@@ -63,16 +62,18 @@ class BibleLink extends Component {
                                     onChange={e => { this.setState({ verse: parseInt(e.target.value) }) }}
                                     type="number"
                                     className={classes.textField}
-                                    InputLabelProps={{
+                                    inputlabelprops={{
                                         shrink: true,
                                     }}
-                                    margin="normal"
                                 />
                             </FormControl>
                         ) : undefined}
                     </div>
                     <Typography variant="caption" gutterBottom >
-                        {`cdse://${book}${chapter?':':""}${chapter || ""}${verse?':':""}${verse || ""}`}
+                        {`cdse://${book?book.value.toLowerCase():""}${chapter?':':""}${chapter || ""}${verse?':':""}${verse || ""}`}
+                    </Typography>
+                    <Typography variant="caption" gutterBottom >
+                        {`${book.label?book.label:""}`}
                     </Typography>
                 </Paper>
             </div>

@@ -11,12 +11,12 @@ import { CStorage } from '../../../lib';
 class SummaryListScreen extends Component {
 
   state = {
-    headers: [ 'title', 'desc', 'contact', 'date', 'time', 'location', 'id'],
+    headers: [  'date', 'desc', 'id'],
     rows: [],
     rowsPerPage: 10,
     page: 0,
     count: 0,
-    orderBy: 'title',
+    orderBy: 'date',
     order: 'asc',
     delete: undefined
   }
@@ -111,7 +111,7 @@ class SummaryListScreen extends Component {
           }}
           edit={row => {
             this.props.history.push({
-              pathname: `/summarys/${row.id}`,
+              pathname: `/summaries/${row.id}`,
               state: { ...row }
             })
           }}
@@ -126,7 +126,7 @@ class SummaryListScreen extends Component {
               data: {
                 type: "notif",
                 message: row.title,
-                title: "Nouvelle Évenement"
+                title: "Nouvelle Résumé"
               },
               priority: "high"
             }
