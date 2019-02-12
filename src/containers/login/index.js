@@ -11,9 +11,13 @@ import styles from './styles';
 import { connect } from 'react-redux';
 import action from '../../state/action';
 import { request, LOGIN } from '../../state/types';
+import {Redirect} from 'react-router-dom';
 
 class LoginScreen extends Component {
 
+  state = {
+    redirect:false
+  }
   _onSubmit = (values, { setSubmitting }) => {
     // setTimeout(() => {
     //   alert(JSON.stringify(values, null, 2));
@@ -22,9 +26,26 @@ class LoginScreen extends Component {
     this.props.loginRequest(values);
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if(prevProps.login != this.props.login && !this.props.login.fetching){
+      setTimeout(() => {
+        this.setState({redirect:true})
+      }, 300);
+      console.log('login')
+    }
+  };
+  
 
   render() {
     const { classes } = this.props
+    if(this.state.redirect){
+      return(<Redirect
+        to={{
+          pathname: "/summaries",
+          state: { from: this.props.location }
+        }}
+      />)
+    }
     return (
       <React.Fragment>
         <CssBaseline />
@@ -52,7 +73,7 @@ LoginScreen.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    
+    login:state.login
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

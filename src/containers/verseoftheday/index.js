@@ -1,98 +1,144 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import styles from './styles';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import styles from "./styles";
 
-import { withStyles, FormControl, InputLabel, Input, Button, Paper, Snackbar, LinearProgress, TextField, InputAdornment, IconButton } from '@material-ui/core';
-import LocationIcon from '@material-ui/icons/LocationOn'
-import RichTextEditor from 'react-rte';
-import { Formik } from 'formik';
-import { performAction } from '../../state';
-import { request, create, remove, update, list, EVENT, VERSE } from '../../state/types';
-import { Redirect } from 'react-router-dom'
-import moment from 'moment';
-import { Screen } from '../../components';
+import {
+  withStyles,
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  Paper,
+  Snackbar,
+  LinearProgress,
+  TextField,
+  InputAdornment,
+  IconButton
+} from "@material-ui/core";
+import LocationIcon from "@material-ui/icons/LocationOn";
+import RichTextEditor from "react-rte";
+import { Formik } from "formik";
+import { performAction } from "../../state";
+import {
+  request,
+  create,
+  remove,
+  update,
+  list,
+  EVENT,
+  VERSE,
+  NOTIFY
+} from "../../state/types";
+import { Redirect } from "react-router-dom";
+import moment from "moment";
+import { Screen } from "../../components";
+import NotifyIcon from "@material-ui/icons/Notifications";
+import { CStorage } from "../../lib";
 
 const initialValues = {
   title: "",
-  verse: "",
-}
+  verse: ""
+};
 class VerseOfTheDayScreen extends Component {
   constructor(props) {
     super(props);
 
-
-    console.log('state', props.location);
+    console.log("state", props.location);
     const { pathname } = props.location;
 
     let nstate = {
       notify: false,
-      notificationMessage: '',
+      notificationMessage: "",
       redirect: undefined,
       initialValues
-    }
+    };
 
-    
     this.state = nstate;
-
   }
 
   componentWillMount() {
     this.props.getVerse();
   }
 
-
-
   componentDidUpdate(prevProps, prevState) {
-    const { getVerseState, updateVerseState} = this.props;
-    if(getVerseState != prevProps.getVerseState && !getVerseState.fetching){
-      if(getVerseState.response){
-        const { verse, title} = getVerseState.response;
-        this.formik.setFieldValue('title',title);
-        this.formik.setFieldValue('verse',verse);
+    const { getVerseState, updateVerseState } = this.props;
+    if (getVerseState != prevProps.getVerseState && !getVerseState.fetching) {
+      if (getVerseState.response) {
+        const { verse, title } = getVerseState.response;
+        this.formik.setFieldValue("title", title);
+        this.formik.setFieldValue("verse", verse);
       }
-    }else if (updateVerseState != prevProps.updateVerseState && !updateVerseState.fetching){
-      if(updateVerseState.response){
+    } else if (
+      updateVerseState != prevProps.updateVerseState &&
+      !updateVerseState.fetching
+    ) {
+      if (updateVerseState.response) {
         // console.log('update verse state',updateVerseState.response);
-        const { setSubmitting} = updateVerseState.response.extra;
+        const { setSubmitting } = updateVerseState.response.extra;
         setSubmitting();
       }
     }
-    
   }
-
- 
 
   _notifyClose = () => {
-    this.setState({ notify: false })
-  }
+    this.setState({ notify: false });
+  };
 
-  
+  _notifyAction = () => {
+    // console.log('notify',row);
+    const env = CStorage.getItem("prod") ? "prod" : "qa";
+
+    const { title, verse } = this.formik.state.values;
+    let message = {
+      to: `/topics/${env}_verse`,
+      data: {
+        type: "notif",
+        tag: "verse",
+        message: verse,
+        title: title
+      },
+      priority: "high",
+      content_available: true
+    };
+    this.props.notifyRequest(message);
+    setTimeout(() => {
+      message.to = message.to + "_ios";
+      message.notification = {
+        body: message.data.message,
+        title: message.data.title
+      };
+      this.props.notifyRequest(message);
+    }, 300);
+  };
+
   _onSubmit = (values, { setSubmitting, resetForm }) => {
     console.log(values);
 
     this.props.updateVerse({
-        values,
-        extra: {
-          setSubmitting,
-          resetForm
-        }
-      })
-
-  }
+      values,
+      extra: {
+        setSubmitting,
+        resetForm
+      }
+    });
+  };
   render() {
     const { match, classes } = this.props;
     const { notify, notificationMessage, redirect, gscript } = this.state;
 
     if (redirect) {
-      return (<Redirect to={redirect} />)
+      return <Redirect to={redirect} />;
     }
     return (
-      <Screen match={match} history={this.props.history} >
+      <Screen match={match} history={this.props.history}>
+        <IconButton onClick={() => this._notifyAction()}>
+          <NotifyIcon />
+        </IconButton>
         <Paper className={classes.paper}>
           <Formik
             initialValues={this.state.initialValues}
             onSubmit={this._onSubmit}
-            ref={ref => this.formik = ref}
+            ref={ref => (this.formik = ref)}
           >
             {({
               values,
@@ -101,82 +147,77 @@ class VerseOfTheDayScreen extends Component {
               handleChange,
               handleBlur,
               handleSubmit,
-              isSubmitting,
+              isSubmitting
               /* and other goodies */
             }) => (
-                <form className={classes.form} onSubmit={handleSubmit}>
-                  <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="title">{"Title"}</InputLabel>
-                    <Input
-                      id="title"
-                      name="title"
-                      type="default"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.title} />
-                  </FormControl>
-                  <TextField
-                    id="verse"
-                    name="verse"
-                    label="Verse"
-                    // placeholder="Placeholder"
-                    multiline
-                    className={classes.textField}
-                    margin="normal"
-                    rowsMax="100"
-                    rows="4"
-                    fullWidth
-                    value={values.verse}
+              <form className={classes.form} onSubmit={handleSubmit}>
+                <FormControl margin="normal" fullWidth>
+                  <InputLabel htmlFor="title">{"Title"}</InputLabel>
+                  <Input
+                    id="title"
+                    name="title"
+                    type="default"
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    value={values.title}
                   />
-                  
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting || Object.keys(errors).length !== 0}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    { 'Update'}
-                  </Button>
-                </form>
-              )}
+                </FormControl>
+                <TextField
+                  id="verse"
+                  name="verse"
+                  label="Verse"
+                  // placeholder="Placeholder"
+                  multiline
+                  className={classes.textField}
+                  margin="normal"
+                  rowsMax="100"
+                  rows="4"
+                  fullWidth
+                  value={values.verse}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
 
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || Object.keys(errors).length !== 0}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  {"Update"}
+                </Button>
+              </form>
+            )}
           </Formik>
         </Paper>
         <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={notify}
           onClose={this._notifyClose}
           ContentProps={{
-            'aria-describedby': 'message-id',
+            "aria-describedby": "message-id"
           }}
           message={<span id="message-id">{notificationMessage}</span>}
         />
-
       </Screen>
-    )
+    );
   }
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   getVerseState: state.verse.get,
-  updateVerseState: state.verse.update,
-  
+  updateVerseState: state.verse.update
+});
 
-})
-
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   getVerse: params => dispatch(performAction(params, request(list(VERSE)))),
-  updateVerse: params => dispatch(performAction(params, request(update(VERSE)))),
-})
+  updateVerse: params =>
+    dispatch(performAction(params, request(update(VERSE)))),
+  notifyRequest: params => dispatch(performAction(params, request(NOTIFY)))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(VerseOfTheDayScreen));
-
-
-
-
-
-
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(VerseOfTheDayScreen));

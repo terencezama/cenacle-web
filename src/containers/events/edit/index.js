@@ -49,7 +49,10 @@ class EventEditScreen extends Component {
         nstate.update = lstate.id;
         nstate = {
           ...nstate,
-          initialValues:{...lstate},
+          initialValues:{
+            ...lstate,
+            date:moment(lstate.date).format('YYYY-MM-DD')
+          },
           update: lstate.id
         }
       }
@@ -89,7 +92,6 @@ class EventEditScreen extends Component {
         setSubmitting(false);
         console.log(this.props.history)
         const { history } = this.props;
-
         history.replace({
           pathname: history.location.pathname,
           state: {
@@ -169,8 +171,9 @@ class EventEditScreen extends Component {
   };
   _onSubmit = (values, { setSubmitting, resetForm }) => {
     const { update } = this.state;
-    console.log(values);
-
+    values.jsdate = moment(values.date).toDate();
+    console.log(values );
+    
     if (!update) {
       this.props.createEvent({
         values,
@@ -180,7 +183,6 @@ class EventEditScreen extends Component {
         }
       })
     } else {
-      console.log(values);
       this.props.updateEvent({
         values: {
           ...values,

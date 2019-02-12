@@ -1,4 +1,4 @@
-import { takeLatest, all } from 'redux-saga/effects'
+import { takeLatest, all, takeEvery } from 'redux-saga/effects'
 
 import { loginSaga } from './login/sagas';
 import { createShareSaga,deleteShareSaga,listShareSaga,updateShareSaga } from './share/sagas';
@@ -17,7 +17,7 @@ export default function * root () {
       takeLatest(request(update(SHARE)),updateShareSaga),
       takeLatest(request(remove(SHARE)),deleteShareSaga),
 
-      takeLatest(request(NOTIFY),notify),
+      takeEvery(request(NOTIFY),notify),
 
       takeLatest(request(create(EVENT)),createEventSaga),
       takeLatest(request(list(EVENT)),listEventSaga),

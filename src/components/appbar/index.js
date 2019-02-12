@@ -29,8 +29,8 @@ class CAppBar extends Component {
   _toggleProdSwitch =()=>{
     const nprod = !this.state.prod;
     CStorage.setItem('prod',nprod);
-    console.log(typeof nprod, nprod)
-    this.setState({prod:!this.state.prod})
+    this.setState({prod:!this.state.prod});
+    console.log('test storage',CStorage.getItem('prod'))
     
   }
 
