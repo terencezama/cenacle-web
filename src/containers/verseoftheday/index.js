@@ -34,6 +34,8 @@ import moment from "moment";
 import { Screen } from "../../components";
 import NotifyIcon from "@material-ui/icons/Notifications";
 import { CStorage } from "../../lib";
+import NotificationDescriptor from "../../notifications/notificationDescriptor";
+import { Platform } from "../../notifications/notifications";
 
 const initialValues = {
   title: "",
@@ -85,29 +87,12 @@ class VerseOfTheDayScreen extends Component {
   };
 
   _notifyAction = () => {
-    // console.log('notify',row);
-    const env = CStorage.getItem("prod") ? "prod" : "qa";
-
     const { title, verse } = this.formik.state.values;
-    let message = {
-      to: `/topics/${env}_verse`,
-      data: {
-        type: "notif",
-        tag: "verse",
-        message: verse,
-        title: title
-      },
-      priority: "high",
-      content_available: true
-    };
-    this.props.notifyRequest(message);
+    
+    let notificationBuilder = NotificationDescriptor.verseOfTheDayNotification(title,verse)
+    this.props.notifyRequest(notificationBuilder.build(Platform.android));
     setTimeout(() => {
-      message.to = message.to + "_ios";
-      message.notification = {
-        body: message.data.message,
-        title: message.data.title
-      };
-      this.props.notifyRequest(message);
+      this.props.notifyRequest(notificationBuilder.build(Platform.ios));
     }, 300);
   };
 
