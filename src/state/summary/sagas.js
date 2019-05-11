@@ -3,7 +3,7 @@ import { performAction, Types } from '..';
 import { firestore, client as firebase } from '../../lib/firebase';
 import { CStorage } from '../../lib';
 import { success, create, SUMMARY, failure, remove, update, list } from '../types';
-
+import moment from 'moment-es6'
 const type = SUMMARY;
 const collection = "summaries";
 
@@ -13,7 +13,7 @@ export function* createSummarySaga(action){
     try{
         const result = yield firestore.collection('cenacle').doc(env).collection(collection).add({
             ...values,
-            // date: new Date()
+            date: moment(values.date).format("YYYY-MM-DD")
         })
         yield put(performAction({result,extra},success(create(type))))
     }catch(e){
