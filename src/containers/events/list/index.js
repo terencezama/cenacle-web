@@ -132,9 +132,9 @@ class EventListScreen extends Component {
           }}
           notify={row => {
             let notificationBuilder = NotificationDescriptor.eventNotification(row.title);
-            this.props.notifyRequest(notificationBuilder.getBody(Platform.android));
+            this.props.notifyRequest(notificationBuilder.build(Platform.android));
             setTimeout(() => {
-              this.props.notifyRequest(notificationBuilder.getBody(Platform.ios));
+              this.props.notifyRequest(notificationBuilder.build(Platform.ios));
             }, 300);
           }}
           search={value => {

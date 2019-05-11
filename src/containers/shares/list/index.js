@@ -7,6 +7,8 @@ import { performAction } from "../../../state";
 import { request, list, SHARE, remove, NOTIFY } from "../../../state/types";
 import { withRouter } from "react-router-dom";
 import { CStorage } from "../../../lib";
+import NotificationDescriptor from "../../../notifications/notificationDescriptor";
+import { Platform } from "../../../notifications/notifications";
 
 class ShareListScreen extends Component {
   state = {
@@ -129,27 +131,10 @@ class ShareListScreen extends Component {
             this.props.deleteShareRequest(row);
           }}
           notify={row => {
-            // console.log('notify',row);
-            const env = CStorage.getItem("prod") ? "prod" : "qa";
-            let message = {
-              to: `/topics/${env}_shares`,
-              data: {
-                type: "notif",
-                tag: "share",
-                message: row.title,
-                title: "Nouvelle Partage"
-              },
-              priority: "high",
-              content_available: true
-            };
-            this.props.notifyRequest(message);
+            let notificationBuilder = NotificationDescriptor.sharesNotification(row.title);
+            this.props.notifyRequest(notificationBuilder.build(Platform.android));
             setTimeout(() => {
-              message.to = message.to + "_ios";
-              message.notification = {
-                body: message.data.message,
-                title: message.data.title
-              };
-              this.props.notifyRequest(message);
+              this.props.notifyRequest(notificationBuilder.build(Platform.ios));
             }, 300);
           }}
           search={value => {
