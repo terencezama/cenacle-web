@@ -13,7 +13,7 @@ export function* createSummarySaga(action){
     try{
         const result = yield firestore.collection('cenacle').doc(env).collection(collection).add({
             ...values,
-            date: new Date()
+            // date: new Date()
         })
         yield put(performAction({result,extra},success(create(type))))
     }catch(e){

@@ -7,6 +7,8 @@ import { performAction } from "../../../state";
 import { request, list, EVENT, remove, NOTIFY } from "../../../state/types";
 import { withRouter } from "react-router-dom";
 import { CStorage } from "../../../lib";
+import NotificationBuilder, {Platform} from "../../../notifications/notifications";
+import NotificationDescriptor from "../../../notifications/notificationDescriptor";
 
 class EventListScreen extends Component {
   state = {
@@ -129,27 +131,10 @@ class EventListScreen extends Component {
             this.props.deleteEventRequest(row);
           }}
           notify={row => {
-            // console.log('notify',row);
-            const env = CStorage.getItem("prod") ? "prod" : "qa";
-            let message = {
-              to: `/topics/${env}_events`,
-              data: {
-                type: "notif",
-                tag: "event",
-                message: row.title,
-                title: "Nouvelle Évenement"
-              },
-              priority: "high",
-              content_available: true
-            };
-            this.props.notifyRequest(message);
+            let notificationBuilder = NotificationDescriptor.eventNotification(row.title);
+            this.props.notifyRequest(notificationBuilder.getBody(Platform.android));
             setTimeout(() => {
-              message.to = message.to + "_ios";
-              message.notification = {
-                body: message.data.message,
-                title: message.data.title
-              };
-              this.props.notifyRequest(message);
+              this.props.notifyRequest(notificationBuilder.getBody(Platform.ios));
             }, 300);
           }}
           search={value => {

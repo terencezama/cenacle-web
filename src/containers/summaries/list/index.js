@@ -17,7 +17,7 @@ class SummaryListScreen extends Component {
     page: 0,
     count: 0,
     orderBy: "date",
-    order: "asc",
+    order: "desc",
     delete: undefined
   };
 
