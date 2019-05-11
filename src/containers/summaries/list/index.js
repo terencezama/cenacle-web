@@ -8,6 +8,8 @@ import { request, list, SUMMARY, remove, NOTIFY } from "../../../state/types";
 import { withRouter } from "react-router-dom";
 import { CStorage } from "../../../lib";
 import moment from "moment-es6";
+import NotificationDescriptor from "../../../notifications/notificationDescriptor";
+import { Platform } from "../../../notifications/notifications";
 
 class SummaryListScreen extends Component {
   state = {
@@ -130,26 +132,10 @@ class SummaryListScreen extends Component {
             this.props.deleteSummaryRequest(row);
           }}
           notify={row => {
-            const env = CStorage.getItem("prod") ? "prod" : "qa";
-            let message = {
-              to: `/topics/${env}_summaries`,
-              data: {
-                type: "notif",
-                tag: "summary",
-                message: row.desc,
-                title: `Nouvelle Résumé`
-              },
-              priority: "high",
-              content_available: true
-            };
-            this.props.notifyRequest(message);
+            let notificationBuilder = NotificationDescriptor.summaryNotification(row.desc);
+            this.props.notifyRequest(notificationBuilder.build(Platform.android));
             setTimeout(() => {
-              message.to = message.to + "_ios";
-              message.notification = {
-                body: message.data.message,
-                title: message.data.title
-              };
-              this.props.notifyRequest(message);
+              this.props.notifyRequest(notificationBuilder.build(Platform.ios));
             }, 300);
           }}
           search={value => {
