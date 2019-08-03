@@ -62,7 +62,7 @@ class NotificationBuilder {
             body.to                 = body.to + "_ios"; 
             body.notification       = {
                 title: this._title,
-                message:this._message
+                body:this._message
             }
         }
         return body
