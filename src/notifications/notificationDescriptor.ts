@@ -4,7 +4,7 @@ import { CStorage } from "../lib";
 class NotificationDescriptor {
     static eventNotification(message: string): NotificationBuilder {
         const environment           = CStorage.getItem("prod") ? "prod" : "qa";
-        let notificationBuilder     = new NotificationBuilder(environment, 'events', message, "Nouveaux Évenment.");
+        let notificationBuilder     = new NotificationBuilder(environment, 'events', message, "Nouvel Évenment.");
         notificationBuilder.tag     = "event"
         notificationBuilder.type    = "notif"
         return notificationBuilder;
@@ -12,7 +12,7 @@ class NotificationDescriptor {
 
     static summaryNotification(message: string): NotificationBuilder {
         const environment           = CStorage.getItem("prod") ? "prod" : "qa";
-        let notificationBuilder     = new NotificationBuilder(environment, 'summaries', message, "Nouveaux Résumé.");
+        let notificationBuilder     = new NotificationBuilder(environment, 'summaries', message, "Nouveau Résumé.");
         notificationBuilder.tag     = "summary"
         notificationBuilder.type    = "notif"
         return notificationBuilder;
@@ -28,7 +28,7 @@ class NotificationDescriptor {
 
     static sharesNotification(message:string):NotificationBuilder{
        const environment           = CStorage.getItem("prod") ? "prod" : "qa";
-       let notificationBuilder     = new NotificationBuilder(environment, 'shares', message, "Nouveaux Partage");
+       let notificationBuilder     = new NotificationBuilder(environment, 'shares', message, "Nouveau Partage");
        notificationBuilder.tag     = "share"
        notificationBuilder.type    = "verse"
        return notificationBuilder;
